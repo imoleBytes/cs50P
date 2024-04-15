@@ -1,5 +1,5 @@
 from twttr import shorten
-
+import pytest
 
 def test_shorten():
     assert shorten('twitter') == 'twttr'
@@ -14,3 +14,7 @@ def test_shorten_capital_argurment():
 
 def test_shorten_lower_argurment():
     assert shorten('lower') == 'lwr'
+
+def test_shorten_number():
+    with pytest.raises(TypeError):
+        shorten(56)
