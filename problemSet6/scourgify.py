@@ -1,8 +1,6 @@
 import sys, csv
 
 def main():
-
-
     num_args = len(sys.argv)
 
     if num_args < 3:
@@ -17,11 +15,13 @@ def main():
             with open(before) as file:
                 reader = csv.DictReader(file)
                 f2 = open(after, "a")
+                writer = csv.DictWriter(f2, fieldnames=["first", "last", "house"])
+                writer.writerow({'first': 'first', 'last': 'last', 'house': 'house'})
 
                 for row in reader:
                     first, last = row['name'].split(', ')
                     house = row['house']
-                    writer = csv.DictWriter(f2, fieldnames=["first", "last", "house"])
+                    
                     writer.writerow({'first': first, 'last': last, 'house': house})
                 f2.close()
         except FileNotFoundError:
