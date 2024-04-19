@@ -2,42 +2,37 @@ import re
 import sys
 
 
-
-# '9:00 AM to 5:00 PM'
-# '9 AM to 5 PM'
-
-
 def main():
     print(convert(input("Hours: ")))
 
 
+def conv(hr, min, meridian):
+    hr = int(hr)
+
+    if meridian == 'AM':
+        if hr == 12:
+            hr = 0
+    else:
+        hr += 12
+        if hr == 24:
+            hr = 12
+    if not min:
+        min = '00'
+    if hr < 10:
+        return f"0{hr}:{min}"
+    return f"{hr}:{min}"
+
+
 def convert(s: str) -> str:
-    # 
-    # print(f)
-    pattrn = r"^([1-9]|1[012]) [AP]M to ([1-9]|1[012]) [AP]M$"
+    pattrn = r"^([1-9]|1[012]):?([0-5][0-9])? ([AP]M) to ([1-9]|1[012]):?([0-5][0-9])? ([AP]M)$"
 
-    if not (re.search(pattrn, s)):
-        return 'invalid'
-        ...
-    
-    first, sec = s.split(' to ')
-    hr_first, meri_first = first.split()
-    hr_sec, meri_sec = sec.split()
-    if meri_first == 'PM':
-        hr_first = int(hr_first) + 12
-        if hr_first == 24:
-            hr_first = 12
+    matches = re.search(pattrn, s)
+    if not matches:
+        raise (ValueError)
+    fro = conv(matches.group(1), matches.group(2), matches.group(3))
+    to = conv(matches.group(4), matches.group(5), matches.group(6))
 
-    if meri_sec == 'PM':
-        hr_sec = int(hr_sec) + 12
-        if hr_sec == 24:
-            hr_sec = 12
-    if hr_first in [12, '12'] and meri_first == 'AM':
-        hr_first = '00'
-    if hr_sec in [12, '12'] and meri_sec == 'AM':
-        hr_sec = '00'
-    
-    return (f"{hr_first}:00 to {hr_sec}:00")
+    return (f"{fro} to {to}")
 
 
 if __name__ == "__main__":
