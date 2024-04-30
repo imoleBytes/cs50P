@@ -1,10 +1,10 @@
 """ TodoList Project:
-    A commandline implementation of the todo list using python and its library.
+    A command line implementation of todo list using python and its library.
 """
 from rich.console import Console
 from rich.table import Table
 from models import Todo
-import os, sys, time, json
+import os, sys, json
 
 
 console = Console()
@@ -18,6 +18,7 @@ if temp:
 
 
 def main():
+    """Entry point of program"""
     while True:
         display_dashboard()
         while True:
@@ -31,11 +32,13 @@ def main():
                     item = input('Enter todo title: ').strip()
                     if item:
                         add(item)
+                        persist_data()
                         display_dashboard()
                 case '2':
                     print('editing...')
                     try:
                         edit(todos)
+                        persist_data()
                     except IndexError as e:
                         print(e)
 
@@ -43,42 +46,55 @@ def main():
                 case '3':
                     print('removing...')
                     if todos:
-                        while True:
-                            try:
-                                num_to_remove = int(input('remove #: '))
-                                if num_to_remove < 1 or num_to_remove > len(todos):
-                                    raise IndexError('Out of range, Please enter the correct number to remove')
-                                break
-                            except IndexError as e:
-                                print(e)
-                            except:
-                                print('Invalid Number')
-
-                            
-                        remove(todos, num_to_remove)
-                        
+                        try:
+                            num_to_remove = int(input('remove #: '))
+                            if num_to_remove < 1 or num_to_remove > len(todos):
+                                raise IndexError('Out of range, Please enter the correct number to remove')
+                            else:
+                                remove(todos, num_to_remove)
+                                persist_data()
+                        except IndexError as e:
+                            print(e)
+                        except:
+                            print('Invalid Number')
                         display_dashboard()
                     else:
                         print('Table is empty!')
                 case '4':
-                    print('completing an item')
-                    complete(todos)
-                    display_dashboard()
+                    if todos:
+                        complete(todos)
+                        persist_data()
+                        display_dashboard()
+                    else:
+                        console.print("[bold red]There's Nothing here to toggle![/bold red]")
                 
                 case '5':
                     os.system('clear')
                     show_table()
-                    print('exiting...')
+                    console.print('[bold cyan]Thanks for using the program...[/bold cyan]')
                     sys.exit()
 
 
 def add(title):
-    global todos
+    """Function add:
+        Args:
+            title <list_of_todo_obj>
+        return:
+            void    
+    """
     item = Todo(title)
     todos.append((item))
 
+def persist_data():
+    """ Persists data to data.json"""
+    with open("data.json", "w") as f:
+        objs = [i.to_dict() for i in todos]
+        json.dump(objs, f)
+
+
 
 def edit(todos: list):
+    """edits todo item"""
     ed = int(input("Enter Item umber(#): ").strip())
     if ed not in range(1, len(todos) + 1):
         raise IndexError(f'Item out of range (Range is 1 - {len(todos)})')
@@ -87,6 +103,8 @@ def edit(todos: list):
     todos[ed - 1].title = newtitle
 
 def complete(todos: list):
+    """Toggles Done attribute of the todo item"""
+
     while True:
         num = input("Toggle Done status for item number #?: ")
         if num == 'exit':
@@ -103,10 +121,14 @@ def complete(todos: list):
 
 
 def remove(todos: list, num):
+    """removes an item from the list"""
+
     todos.pop(num-1)
 
 
 def display_dashboard():
+    """display the dashboard"""
+
     os.system('clear')
     print("................................................\n")
     show_table()
@@ -118,9 +140,12 @@ def display_dashboard():
           4. Complete
           5. Exit
           """)
+    return None
 
 
 def show_table():
+    """contructs the table consisting the items"""
+
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("Number (#)")
     table.add_column("Todo item")
@@ -135,12 +160,15 @@ def show_table():
             else:
                 table.add_row(str(i + 1), todos[i].title, str(todos[i].done))
             
-            # print(f"{i + 1}  - {str(todos[i])}")
         console.print(table)
 
     else:
-        console.print('[i]************** No todos here! ****************---[/i]')
+        console.print('[blink i red]************** No todos here! ****************---[/blink i red]')
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt as e:
+        print()
+        sys.exit(1)
