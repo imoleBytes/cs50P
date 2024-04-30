@@ -9,9 +9,9 @@ Make sure to install the package below before use
 ```
 pip install rich
 ```
-or simply make use of the requirements.txt 
+or simply make use of the requirements.txt
 ```
-python3 -r requirements.txt
+pip install -r requirements.txt
 ```
 
 The Program require no arguements
