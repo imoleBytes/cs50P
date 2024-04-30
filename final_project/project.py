@@ -10,11 +10,15 @@ import os, sys, json
 console = Console()
 
 todos = []
-with open("data.json") as f:
-    temp = json.load(f)
-if temp:
-    for i in temp:
-        todos.append(Todo(i['title'], i['done']))
+try:
+
+    with open("data.json") as f:
+        temp = json.load(f)
+    if temp:
+        for i in temp:
+            todos.append(Todo(i['title'], i['done']))
+except Exception as e:
+    pass
 
 
 def main():
@@ -36,6 +40,8 @@ def main():
                         display_dashboard()
                 case '2':
                     print('editing...')
+                    if not todos:
+                        console.print("no to do")
                     try:
                         edit(todos)
                         persist_data()
@@ -171,4 +177,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt as e:
         print()
+        console.print('[bold cyan]Thanks for using the program...[/bold cyan]')
         sys.exit(1)
