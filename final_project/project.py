@@ -41,7 +41,7 @@ def main():
                 case '2':
                     print('editing...')
                     if not todos:
-                        console.print("no to do")
+                        console.print('[blink i red]************** No todos here! ****************---[/blink i red]')
                     try:
                         edit(todos)
                         persist_data()
@@ -65,7 +65,8 @@ def main():
                             print('Invalid Number')
                         display_dashboard()
                     else:
-                        print('Table is empty!')
+                        console.print('[blink i red]************** No todos here! ****************---[/blink i red]')
+
                 case '4':
                     if todos:
                         complete(todos)

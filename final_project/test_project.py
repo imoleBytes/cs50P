@@ -1,4 +1,3 @@
-import pytest
 from project import *
 
 def test_add():

@@ -14,6 +14,7 @@ or simply make use of the requirements.txt
 pip install -r requirements.txt
 ```
 
+## Usage:
 The Program require no arguements
 just simply run it like this below
 ```
