@@ -1,5 +1,5 @@
 # TERMINAL TODO LIST
-#### Video Demo:  <URL HERE>
+#### Video Demo:  <URL https://www.youtube.com/watch?v=joHp7dijN-g>
 #### Description: The terminal Todo List program is a simple todo list application 
 that can be ussed on the terminal. It uses the Rich Python Package to make it a little beautiful
 
